@@ -1,42 +1,57 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { MessageSquare, Paperclip, Pencil, Trash } from "lucide-react"
-import { useTaskContext, type Task } from "@/contexts/TaskContext"
+import { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { MessageSquare, Paperclip, Pencil, Trash } from "lucide-react";
+import { useTaskContext, type Task } from "@/contexts/TaskContext";
 
-interface TaskCardProps extends Task {}
+type TaskCardProps = Task;
 
-export function TaskCard({ id, title, description, status, labels, assignees, comments, attachments }: TaskCardProps) {
-  const { editTask, deleteTask } = useTaskContext()
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [editedTitle, setEditedTitle] = useState(title)
-  const [editedDescription, setEditedDescription] = useState(description)
+export function TaskCard({
+  id,
+  title,
+  description,
+  labels,
+  assignees,
+  comments,
+  attachments,
+}: TaskCardProps) {
+  const { editTask, deleteTask } = useTaskContext();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(title);
+  const [editedDescription, setEditedDescription] = useState(description);
 
   const handleEdit = (e: React.FormEvent) => {
-    e.preventDefault()
-    editTask(id, { title: editedTitle, description: editedDescription })
-    setIsEditDialogOpen(false)
-  }
+    e.preventDefault();
+    editTask(id, { title: editedTitle, description: editedDescription });
+    setIsEditDialogOpen(false);
+  };
 
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete this task?")) {
-      deleteTask(id)
+      deleteTask(id);
     }
-  }
+  };
 
   return (
     <>
       <Card>
         <CardContent className="p-4 space-y-4">
           <h3 className="font-medium line-clamp-1">{title}</h3>
-          <p className="text-sm text-muted-foreground line-clamp-2">{description}</p>
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {description}
+          </p>
           <div className="flex flex-wrap gap-2">
             {labels.map((label) => (
               <Badge key={label} variant="secondary" className="rounded-full">
@@ -47,7 +62,10 @@ export function TaskCard({ id, title, description, status, labels, assignees, co
           <div className="flex items-center justify-between">
             <div className="flex -space-x-2 overflow-hidden">
               {assignees.map((assignee, i) => (
-                <Avatar key={i} className="inline-block h-6 w-6 rounded-full ring-2 ring-background">
+                <Avatar
+                  key={i}
+                  className="inline-block h-6 w-6 rounded-full ring-2 ring-background"
+                >
                   <AvatarImage src={assignee.image} />
                   <AvatarFallback>{assignee.name[0]}</AvatarFallback>
                 </Avatar>
@@ -66,7 +84,11 @@ export function TaskCard({ id, title, description, status, labels, assignees, co
           </div>
         </CardContent>
         <CardFooter className="p-4 pt-0 justify-end space-x-2">
-          <Button size="icon" variant="ghost" onClick={() => setIsEditDialogOpen(true)}>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => setIsEditDialogOpen(true)}
+          >
             <Pencil className="h-4 w-4" />
           </Button>
           <Button size="icon" variant="ghost" onClick={handleDelete}>
@@ -102,6 +124,5 @@ export function TaskCard({ id, title, description, status, labels, assignees, co
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
-
